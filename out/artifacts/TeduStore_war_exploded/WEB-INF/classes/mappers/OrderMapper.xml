@@ -1,0 +1,49 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+  PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+  "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="cn.tedu.store.mapper.OrderMapper">
+
+	<insert id="insertOrder" parameterType="cn.tedu.store.bean.Order"
+		keyProperty="id" useGeneratedKeys="true">
+		insert into t_order (tradetime, userid
+		)
+		values (now(),#{userid}
+		)
+	</insert>
+
+	<insert id="insertOrderItem" parameterType="cn.tedu.store.bean.OrderItem"
+		keyProperty="id" useGeneratedKeys="true">
+		insert into t_orderitem (userid,
+		goodsid,
+		image, title, price,
+		count,
+		orderid)
+		values (#{userid}, #{goodsid},
+		#{image}, #{title}, #{price},
+		#{count},
+		#{orderid})
+	</insert>
+	<update id="updateStatus" parameterType="java.lang.Integer">
+		update t_orderitem set
+		paymentstatus=1 where orderid=#{orderid}
+	</update>
+	<select id="getOrderItem" parameterType="java.lang.Integer"
+		resultType="cn.tedu.store.bean.OrderItemVo">
+		select
+		t_order.id as orderid,
+		t_orderitem.id as orderitemid,
+		tradetime,
+		image,
+		title,
+		price,
+		count,
+		paymentstatus,
+		orderstatus
+		from t_order,t_orderitem
+		where
+		t_order.id = t_orderitem.orderid
+		and
+		t_order.userid=#{userid}
+	</select>
+</mapper>
